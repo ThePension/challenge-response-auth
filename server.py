@@ -1,12 +1,12 @@
-import random
 import hashlib
 import secrets
 
 users = {
     "toto": "pwd", # hashlib.sha256("pwd".encode()).hexdigest(),
-    "user2": hashlib.sha256("pass2".encode()).hexdigest()
+    "user2": "pass2" # hashlib.sha256("pass2".encode()).hexdigest()
+    # Les mots de passe sont stockés en clair dans le dictionnaire, mais ils devraient être stockés en hash
+    # Voir le lien suivant pour les explications : https://en.wikipedia.org/wiki/Challenge%E2%80%93response_authentication#Password_storage
 }
-
 
 class Server:
     def __init__(self):
@@ -43,12 +43,8 @@ class Server:
         # Check if the challenge result is correct
         if challenge_result == self.solve_challenge(username, cnonce):
             self.auth_users.append(username)
-            print("Welcome " + username)
             return True
         else:
-            print("Wrong challenge result")
-            print("Expected: " + self.solve_challenge(username, cnonce))
-            print("Got: " + challenge_result)
             return False
 
     def solve_challenge(self, username, cnonce):
@@ -57,9 +53,5 @@ class Server:
         
         # Get the user password
         password = users[username]
-        
-        print("Received cnonce: " + str(cnonce))
-        print("Received nonce: " + str(nonce))
-        print("User password: " + password)
         
         return hashlib.sha256((str(nonce) + str(cnonce) + password).encode()).hexdigest()

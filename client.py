@@ -2,7 +2,6 @@ import hashlib
 import random
 import secrets
 
-
 class Client:
     def __init__(self, username, password, server):
         self.username = username
